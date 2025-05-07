@@ -4,9 +4,10 @@ import { getRandomInterviewCover } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import DisplayTechIcons from './DisplayTechIcons';
+import { getFeedbackByInterviewId } from '@/lib/actions/general.action.server';
 
-const InterviewCard = ({id, userId, role, type, techstack, createdAt}:InterviewCardProps) => {
-    const feedback=null as Feedback | null;
+const InterviewCard = async({id, userId, role, type, techstack, createdAt}:InterviewCardProps) => {
+    const feedback=userId && id ? await getFeedbackByInterviewId({interviewId:id,userId}):null;
     //tech
     const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
     const formattedDate=dayjs(feedback?.createdAt || createdAt || Date.now()).format('MMM D, YYYY');
@@ -21,6 +22,7 @@ const InterviewCard = ({id, userId, role, type, techstack, createdAt}:InterviewC
             <h3 className='mt-5 capitalize'>
                 {role} Interview
             </h3>
+            
             <div className='flex flex-row gap-5 mt-3'>
                 <div className='flex flex-row gap-2'>
                     <Image src="/calendar.svg" alt='calendar' width={22} height={22}/>

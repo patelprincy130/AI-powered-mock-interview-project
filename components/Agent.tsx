@@ -6,6 +6,10 @@ import { useRouter } from 'next/navigation';
 // import { Content } from 'next/font/google';
 import {vapi} from '@/lib/vapi.sdk';
 import {interviewer} from '@/constants';
+//import { createFeedback } from '@/lib/actions/general.action';
+
+import { createFeedbackAction } from '@/app/actions/createFeedback.server';
+
 
 enum CallStatus{
     INACTIVE = 'INACTIVE',
@@ -58,15 +62,16 @@ const Agent = ({userName,userId,type,interviewId,questions}:AgentProps) => {
         }
     },[])
 
-    const handleGenerateFeedback=(messages:SavedMessage[])=>{
+    const handleGenerateFeedback=async (messages:SavedMessage[])=>{
         console.log('Generate feedback here');
 
         //Create a server action that generates feedback
 
-        const {success,id}={
-            success:true,
-            id:'feedback-id'
-        }
+        const {success,feedbackId:id}=await createFeedbackAction({
+            interviewId:interviewId!,
+            userId:userId!,
+            transcript:messages
+        })
         if(success && id){
             router.push(`/interview/${interviewId}/feedback`);
         }else{

@@ -4,9 +4,9 @@ import Image from 'next/image'
 import InterviewCard from '@/components/InterviewCard'
 import {Button} from '@/components/ui/button';
 import { getCurrentUser } from '@/lib/actions/auth.action'
-import { getInterviewsByUserId, getLatestInterviews} from "@/lib/actions/general.action"
+import { getInterviewsByUserId, getLatestInterviews} from "@/lib/actions/general.action.server"
 
-const page = async () => {
+const Page = async () => {
   const user=await getCurrentUser();
 
   const [userInterviews,latestInterviews]=await Promise.all([
@@ -25,7 +25,7 @@ const page = async () => {
           <p className='text-lg'>
             Practice on real interview questions and get feedback
           </p>
-          <button asChild className='btn-primary max-sm:w-full'>
+          <button className='btn-primary max-sm:w-full'>
             <Link href="/interview">Start an Interview</Link>
           </button>
         </div>
@@ -65,4 +65,4 @@ const page = async () => {
   )
 }
 
-export default page
+export default Page
